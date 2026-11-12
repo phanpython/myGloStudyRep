@@ -7,7 +7,7 @@ let service1 = prompt("Какой дополнительный тип услуг
 let servicePrice1 = +prompt("Сколько это будет стоить?");
 let service2 = prompt("Какой дополнительный тип услуги нужен?");
 let servicePrice2 = +prompt("Сколько это будет стоить?");
-let adaptive = prompt("Нужен ли адаптив на сайте?");
+let adaptive = confirm("Нужен ли адаптив на сайте?");
 let rollback = 20;
 let fullPrice;
 let servicePercentPrice;
@@ -26,38 +26,36 @@ const getRollbeckMessage = function (price) {
   }
 };
 
-const getAllServicePrices = function (priceService1, priceService2) {
-  return priceService1 + priceService2;
+const getAllServicePrices = function () {
+  return servicePrice1 + servicePrice2;
 };
 
-function getFullPrice(priceScreen, callback, priceService1, priceService2){
-  return priceScreen + callback(priceService1, priceService2);
+function getFullPrice() {
+  return screenPrice + allServicePrices;
+}
+
+const getTitle = function () {
+  title = title.trimStart();
+  return title[0].toUpperCase() + title.slice(1).toLowerCase();
 };
 
-const getTitle = function (titleProject) {
-  titleProject = titleProject.trimStart();
-  return titleProject[0].toUpperCase() + titleProject.slice(1).toLowerCase();
-};
-
-const getServicePercentPrices = function (rollback, callback, screenPrice, servicePrice1, servicePrice2) {
-  fullPrice = callback(screenPrice, getAllServicePrices, servicePrice1, servicePrice2)
+const getServicePercentPrices = function () {
   return Math.ceil(fullPrice - fullPrice * (rollback / 100));
 };
 
-const showTypeOf = function(variable) {
+const showTypeOf = function (variable) {
   return typeof variable;
 };
 
-allServicePrices = getAllServicePrices(servicePrice1, servicePrice2);
-fullPrice = getFullPrice(screenPrice, getAllServicePrices, servicePrice1, servicePrice2);
-title = getTitle(title);
-servicePercentPrice = getServicePercentPrices(rollback, getFullPrice, screenPrice, servicePrice1, servicePrice2)
+allServicePrices = getAllServicePrices();
+fullPrice = getFullPrice();
+title = getTitle();
+servicePercentPrice = getServicePercentPrices();
 
 console.log(fullPrice, showTypeOf(fullPrice));
-console.log("Типы экранов - " + screens); 
+console.log(adaptive, showTypeOf(adaptive));
+console.log(service1, showTypeOf(service1));
+
+console.log("Типы экранов - " + screens);
 console.log(getRollbeckMessage(fullPrice));
 console.log("Итоговая стоимость без отката " + servicePercentPrice);
-
-// console.log("Цена всех доп сервисов " + allServicePrices);
-// console.log("Полная цена " + fullPrice);
-// console.log("Название " + title);
