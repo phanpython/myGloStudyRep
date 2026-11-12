@@ -1,77 +1,63 @@
-// Второе задание
+"use strict";
 
-let title = "lesson02";
-let screens = "Простые, Сложные, Интерактивные";
-let screenPrice = 1100;
-let rollback = 20;
-let fullPrice = 4500;
-let adaptive = true;
-
-console.log(typeof title);
-console.log(typeof fullPrice);
-console.log(typeof adaptive);
-console.log(screens.length);
-console.log(
-  "Стоимость верстки экранов " +
-    screenPrice +
-    " рублей / " +
-    Math.round(screenPrice * 0.012) +
-    " долларов / " +
-    screenPrice * 0.55 +
-    " гривен / " +
-    screenPrice * 0.08 +
-    " юаней",
-);
-
-console.log(
-  "Стоимость верстки экранов " +
-    fullPrice +
-    " рублей / " +
-    Math.round(fullPrice * 0.012) +
-    " долларов / " +
-    fullPrice * 0.55 +
-    " гривен / " +
-    fullPrice * 0.08 +
-    " юаней",
-);
-
-console.log(screens.toLowerCase().split(", "));
-console.log(fullPrice * (rollback / 100));
-
-// Третье задание
-
-title = prompt("Как называется ваш проект?");
-screens = prompt("Какие типы экранов нужно разработать?");
-screenPrice = prompt("Сколько будет стоить данная работа?");
-adaptive = prompt("Нужен ли адаптив на сайте?");
-console.log(adaptive);
-
+let title = prompt("Как называется ваш проект?");
+let screens = prompt("Какие типы экранов нужно разработать?");
+let screenPrice = +prompt("Сколько будет стоить данная работа?");
 let service1 = prompt("Какой дополнительный тип услуги нужен?");
-let servicePrice1 = prompt("Сколько это будет стоить?");
+let servicePrice1 = +prompt("Сколько это будет стоить?");
 let service2 = prompt("Какой дополнительный тип услуги нужен?");
-let servicePrice2 = prompt("Сколько это будет стоить?");
+let servicePrice2 = +prompt("Сколько это будет стоить?");
+let adaptive = prompt("Нужен ли адаптив на сайте?");
+let rollback = 20;
+let fullPrice;
+let servicePercentPrice;
+let allServicePrices;
 
-fullPrice = Number(screenPrice) + Number(servicePrice1) + Number(servicePrice2);
+const getRollbeckMessage = function (price) {
+  switch (true) {
+    case price >= 30000:
+      return "Даем скидку в 10%";
+    case price >= 15000 && price < 30000:
+      return "Даем скидку в 5%";
+    case price < 15000 && price >= 0:
+      return "Скидка не предусмотрена";
+    default:
+      return "Что то пошло не так";
+  }
+};
 
-console.log("итоговую стоимость " + fullPrice);
+const getAllServicePrices = function (priceService1, priceService2) {
+  return priceService1 + priceService2;
+};
 
-let servicePercentPrice = Math.ceil(fullPrice - rollback);
+function getFullPrice(priceScreen, callback, priceService1, priceService2){
+  return priceScreen + callback(priceService1, priceService2);
+};
 
-console.log(
-  "итоговая стоимость за вычетом отката посреднику " + servicePercentPrice,
-);
+const getTitle = function (titleProject) {
+  titleProject = titleProject.trimStart();
+  return titleProject[0].toUpperCase() + titleProject.slice(1).toLowerCase();
+};
 
-switch (true) {
-  case fullPrice >= 30000:
-    console.log("Даем скидку в 10%");
-    break;
-  case fullPrice >= 15000 && fullPrice < 30000:
-    console.log("Даем скидку в 5%");
-    break;
-  case fullPrice < 15000 && fullPrice >= 0:
-    console.log("Скидка не предусмотрена");
-    break;
-  default:
-    console.log("Что то пошло не так");
-    break;
-}
+const getServicePercentPrices = function (rollback, callback, screenPrice, servicePrice1, servicePrice2) {
+  fullPrice = callback(screenPrice, getAllServicePrices, servicePrice1, servicePrice2)
+  return Math.ceil(fullPrice - fullPrice * (rollback / 100));
+};
+
+const showTypeOf = function(variable) {
+  return typeof variable;
+};
+
+allServicePrices = getAllServicePrices(servicePrice1, servicePrice2);
+fullPrice = getFullPrice(screenPrice, getAllServicePrices, servicePrice1, servicePrice2);
+title = getTitle(title);
+servicePercentPrice = getServicePercentPrices(rollback, getFullPrice, screenPrice, servicePrice1, servicePrice2)
+
+console.log(fullPrice, showTypeOf(fullPrice));
+console.log("Типы экранов - " + screens); 
+console.log(getRollbeckMessage(fullPrice));
+console.log("Итоговая стоимость без отката " + servicePercentPrice);
+
+// console.log("Цена всех доп сервисов " + allServicePrices);
+// console.log("Полная цена " + fullPrice);
+// console.log("Название " + title);
