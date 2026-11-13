@@ -12,25 +12,27 @@ let adaptive;
 let screenPrice;
 
 const isNumber = function (num) {
-  return !isNaN(parseFloat(num)) && isFinite(num);
+  return !isNaN(parseFloat(num)) && isFinite(num) && num != 0;
+};
+
+const checkText = function (nameText, text, suggestText) {
+  do {
+    nameText = prompt(text, suggestText);
+  } while (nameText == "" || typeof nameText == "object");
+  return nameText;
 };
 
 const asking = function () {
-  do {
-    title = prompt("Как называется ваш проект?", "Калькулятор вёрстки");
-  } while (title == "");
-
-  do {
-    screens = prompt(
-      "Какие типы экранов нужно разработать?",
-      "Простые, сложные",
-    );
-  } while (screens == "");
+  title = checkText(title, "Как называется ваш проект?", "Калькулятор вёрстки");
+  screens = checkText(
+    screens,
+    "Какие типы экранов нужно разработать?",
+    "Простые, сложные",
+  );
 
   do {
     screenPrice = +prompt("Сколько будет стоить данная работа?");
   } while (!isNumber(screenPrice));
-
   adaptive = confirm("Нужен ли адаптив на сайте?");
 };
 
@@ -40,12 +42,14 @@ const getAllServicePrices = function () {
 
   for (let i = 0; i < 2; i++) {
     if (i === 0) {
-      service1 = prompt(
+      service1 = checkText(
+        service1,
         "Какой дополнительный тип услуги нужен?",
         "Анимированные кнопки",
       );
     } else if (i === 1) {
-      service2 = prompt(
+      service2 = checkText(
+        service2,
         "Какой дополнительный тип услуги нужен?",
         "Руководство пользователя",
       );
@@ -88,15 +92,14 @@ const getServicePercentPrices = function () {
 const showTypeOf = function (variable) {
   return typeof variable;
 };
-console.log(title);
+
 asking();
-console.log(title);
 allServicePrices = getAllServicePrices();
 fullPrice = getFullPrice();
 title = getTitle();
 servicePercentPrice = getServicePercentPrices();
 
-console.log("allServicePrices" + allServicePrices);
+console.log("Цена всех доп услуг " + allServicePrices);
 console.log(fullPrice, showTypeOf(fullPrice));
 console.log(adaptive, showTypeOf(adaptive));
 console.log(service1, showTypeOf(service1));
